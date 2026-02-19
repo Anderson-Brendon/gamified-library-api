@@ -15,6 +15,11 @@ public class FavoriteBook {
 		
 	}
 	
+    public FavoriteBook(AppUser user, Book book) {
+		this.book = book;
+		this.user = user;
+	}
+	
 	@EmbeddedId
 	private FavoriteBookId id;
 	
@@ -32,24 +37,12 @@ public class FavoriteBook {
 		return id;
 	}
 
-	public void setId(FavoriteBookId id) {
-		this.id = id;
-	}
-
 	public AppUser getUser() {
 		return user;
 	}
 
-	public void setUser(AppUser user) {
-		this.user = user;
-	}
-
 	public Book getBook() {
 		return book;
-	}
-
-	public void setBook(Book book) {
-		this.book = book;
 	}
 	
 	

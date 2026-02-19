@@ -1,8 +1,11 @@
 package com.gamifiedlibrary.api.domain.models;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -41,14 +44,51 @@ public class AppUser {
 	
 	private boolean isVerified;
 	
-	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY)//indica que só vai buscar os dados ao acessar o campo
-	private List<FavoriteBook> favoritesBooks = new ArrayList<FavoriteBook>();
+	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL)
+	List<QuizResult> quizResults = new ArrayList<QuizResult>();
 	
-	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-	List<QuizResult> quizResults = new ArrayList<QuizResult>();;
+	                             //indica que só vai buscar os dados ao acessar o campo
+	@OneToMany(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL)
+	private Set<FavoriteBook> favoritesBooks = new HashSet<>();	
+	
+	@OneToMany(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL)
+	private Set<ReadingListBook> booksOnList = new HashSet<>();
+	
+	@OneToMany(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private Set<Review> bookReviews = new HashSet<>();
 
 	@Column(length = 6, nullable = false)
 	private String verificationCode;
+	
+	public void addBookAsFavorite(Book book) {//aggregate root
+		this.favoritesBooks.add(new FavoriteBook(this, book));
+	}
+	
+    public void removeBookFromFavorite(Book book) {
+		this.favoritesBooks.removeIf(f -> f.getBook().equals(book));
+	}
+    
+    public void addBookOnList(Book book) {
+		this.booksOnList.add(new ReadingListBook(this, book));
+	}
+	
+    public void removeBookFromList(Book book) {
+		this.booksOnList.removeIf(bookOnList -> bookOnList.getBook().equals(book));
+	}
+    
+    public void addReview(Book book, int rate, String comment) {//aggregate root
+		this.bookReviews.add(new Review(this, book, rate, comment));
+	}
+    
+    public void editReview(int bookId, int rate, String comment) {
+		Review foundReview = this.bookReviews.stream().filter(b -> b.getBook().getId() == (bookId)).
+				findFirst().orElseThrow(() -> new IllegalArgumentException("Review not found"));
+		foundReview.update(rate, comment);
+	}
+    
+    public void removeReview(Book book) {
+		this.bookReviews.removeIf(r -> r.getBook().equals(book));
+	}
 
 	public int getId() {
 		return id;
@@ -106,12 +146,8 @@ public class AppUser {
 		this.verificationCode = verificationCode;
 	}
 	
-	public List<FavoriteBook> getFavoritesBooks() {
+	public Set<FavoriteBook> getFavoritesBooks() {
 		return favoritesBooks;
-	}
-
-	public void setFavoritesBooks(List<FavoriteBook> favoritesBooks) {
-		this.favoritesBooks = favoritesBooks;
 	}
 	
 	

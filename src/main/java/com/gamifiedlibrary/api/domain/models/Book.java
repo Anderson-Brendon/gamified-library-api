@@ -29,7 +29,7 @@ public class Book {
 	private String description;
 	
 	@Column(length = 4, nullable = false)
-	private String releaseYear;
+	private short releaseYear;
 	
 	@NotBlank
 	private String bookCover;
@@ -72,11 +72,11 @@ public class Book {
 		this.description = description;
 	}
 
-	public String getReleaseYear() {
+	public short getReleaseYear() {
 		return releaseYear;
 	}
 
-	public void setReleaseYear(String releaseYear) {
+	public void setReleaseYear(short releaseYear) {
 		this.releaseYear = releaseYear;
 	}
 

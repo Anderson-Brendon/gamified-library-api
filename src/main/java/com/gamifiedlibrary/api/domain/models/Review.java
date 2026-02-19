@@ -20,6 +20,13 @@ public class Review {
 		
 	}
 	
+    public Review(AppUser user, Book book, int rate, String comment) {
+		this.user = user;
+		this.book = book;
+		this.rate = rate;
+		this.comment = comment;
+	}
+	
 	@EmbeddedId
 	private ReviewId id;
 	
@@ -44,6 +51,11 @@ public class Review {
 	@NotBlank
 	private String comment;
 
+	public void update(int rate, String comment) {
+		this.rate = rate;
+		this.rate = rate;
+	}
+	
 	public AppUser getUser() {
 		return user;
 	}

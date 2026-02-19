@@ -12,6 +12,15 @@ import jakarta.persistence.MapsId;
 @Entity
 public class ReadingListBook {
 	
+	public ReadingListBook() {
+		
+	}
+	
+    public ReadingListBook(AppUser user, Book book) {
+		this.book = book;
+		this.user = user;
+	}
+	
 	@EmbeddedId
 	private ReadingListBookId id;
 	
@@ -20,6 +29,22 @@ public class ReadingListBook {
 	@JoinColumn(name = "user_id")
 	private AppUser user;
 	
+	public AppUser getUser() {
+		return user;
+	}
+
+	public void setUser(AppUser user) {
+		this.user = user;
+	}
+
+	public Book getBook() {
+		return book;
+	}
+
+	public void setBook(Book book) {
+		this.book = book;
+	}
+
 	@MapsId("bookId")
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "book_id")
