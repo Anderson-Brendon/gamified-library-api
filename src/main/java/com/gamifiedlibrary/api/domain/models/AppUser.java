@@ -5,6 +5,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -26,7 +29,7 @@ public class AppUser {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	private int id;
+	private Long id;
 	
 	@NotBlank
 	@Size(min = 6, max = 15, message = "Name must be between 6 and 15 characters long.")
@@ -43,17 +46,20 @@ public class AppUser {
 	private String passwordHash;
 	
 	private boolean isVerified;
-	
+	@JsonIgnore // não serializar em json ao solicitar usuario
 	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL)
 	List<QuizResult> quizResults = new ArrayList<QuizResult>();
 	
 	                             //indica que só vai buscar os dados ao acessar o campo
-	@OneToMany(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@JsonIgnore
 	private Set<FavoriteBook> favoritesBooks = new HashSet<>();	
 	
-	@OneToMany(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL)
+	@JsonIgnore
+	@OneToMany(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Set<ReadingListBook> booksOnList = new HashSet<>();
 	
+	@JsonIgnore
 	@OneToMany(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Set<Review> bookReviews = new HashSet<>();
 
@@ -69,7 +75,7 @@ public class AppUser {
 	}
     
     public void addBookOnList(Book book) {
-		this.booksOnList.add(new ReadingListBook(this, book));
+		this.booksOnList.add(new ReadingListBook(this, book, 0, false));
 	}
 	
     public void removeBookFromList(Book book) {
@@ -90,11 +96,11 @@ public class AppUser {
 		this.bookReviews.removeIf(r -> r.getBook().equals(book));
 	}
 
-	public int getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

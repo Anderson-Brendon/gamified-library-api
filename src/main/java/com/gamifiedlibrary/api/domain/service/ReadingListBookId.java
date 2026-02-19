@@ -13,27 +13,33 @@ public class ReadingListBookId implements Serializable{
 		
 	}
 
+	public ReadingListBookId(Long userId, Long bookId) {
+		// TODO Auto-generated constructor stub
+		this.userId = userId;
+		this.bookId = bookId;
+	}
+
 	private static final long serialVersionUID = 1L;
 
 	@Column(name = "user_id")
-	private int userId;
+	private Long userId;
 	
 	@Column(name = "book_id")
-	private int bookId;
+	private Long bookId;
 
-	public int getUserId() {
+	public Long getUserId() {
 		return userId;
 	}
 
-	public void setUserId(int userId) {
+	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
 
-	public int getBookId() {
+	public Long getBookId() {
 		return bookId;
 	}
 
-	public void setBookId(int bookId) {
+	public void setBookId(Long bookId) {
 		this.bookId = bookId;
 	}
 

@@ -1,5 +1,7 @@
 package com.gamifiedlibrary.api.domain.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.gamifiedlibrary.api.domain.service.ReadingListBookId;
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
@@ -16,18 +18,33 @@ public class ReadingListBook {
 		
 	}
 	
-    public ReadingListBook(AppUser user, Book book) {
+    public ReadingListBook(AppUser user, Book book, int currentPage, boolean isComplete) {
 		this.book = book;
 		this.user = user;
+		this.id = new ReadingListBookId(user.getId(), book.getId());
+		this.currentPage = currentPage;
+		this.isComplete = isComplete;
 	}
 	
 	@EmbeddedId
 	private ReadingListBookId id;
 	
+	@JsonIgnore
 	@MapsId("userId")
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id")
 	private AppUser user;
+	
+	@MapsId("bookId")
+	@ManyToOne
+	@JoinColumn(name = "book_id")
+	private Book book;
+	
+	@Column(nullable = false, columnDefinition = "integer default 0")
+	private int currentPage;
+	
+	@Column(nullable = false)
+	private boolean isComplete;
 	
 	public AppUser getUser() {
 		return user;
@@ -44,17 +61,6 @@ public class ReadingListBook {
 	public void setBook(Book book) {
 		this.book = book;
 	}
-
-	@MapsId("bookId")
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "book_id")
-	private Book book;
-	
-	@Column(nullable = false, columnDefinition = "integer default 0")
-	private int currentPage;
-	
-	@Column(nullable = false)
-	private boolean isComplete;
 
 	public int getCurrentPage() {
 		return currentPage;

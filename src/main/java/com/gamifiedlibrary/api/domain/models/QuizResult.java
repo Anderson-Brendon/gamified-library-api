@@ -1,5 +1,6 @@
 package com.gamifiedlibrary.api.domain.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.gamifiedlibrary.api.domain.service.QuizResultId;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
@@ -20,11 +21,13 @@ public class QuizResult {
 	@EmbeddedId
 	private QuizResultId id;
 	
+	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@MapsId("userId")
 	@JoinColumn(name = "user_id")//apenas o lado dono da relação deve usar o joincolumn
 	private AppUser user;
 	
+	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@MapsId("bookId")
 	@JoinColumn(name = "book_id")

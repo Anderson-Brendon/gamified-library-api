@@ -1,5 +1,6 @@
 package com.gamifiedlibrary.api.domain.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.gamifiedlibrary.api.domain.service.ReviewId;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
@@ -30,11 +31,13 @@ public class Review {
 	@EmbeddedId
 	private ReviewId id;
 	
+	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@MapsId("userId")
 	@JoinColumn(name = "user_id")
 	private AppUser user;
 	
+	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@MapsId("bookId")
 	@JoinColumn(name = "book_id")
@@ -47,7 +50,6 @@ public class Review {
 	private int rate;
     
 	//size para comprimento da string
-	@Size(min = 6, max = 15, message = "Name must be between 6 and 15 characters long.")
 	@NotBlank
 	private String comment;
 
