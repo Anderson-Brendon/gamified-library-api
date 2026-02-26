@@ -1,5 +1,7 @@
 package com.gamifiedlibrary.api.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -32,7 +34,7 @@ public class Book {
 	private short releaseYear;
 	
 	@NotBlank
-	private String bookCover;
+	private String cover;
 	
 	@NotBlank
 	private String pdf;
@@ -40,10 +42,12 @@ public class Book {
 	@NotBlank
 	private String slug;
 	
+	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "author_id")
 	Author author;
 	
+	@JsonIgnore
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "genre_id")
 	private Genre genre;
@@ -80,12 +84,12 @@ public class Book {
 		this.releaseYear = releaseYear;
 	}
 
-	public String getBookCover() {
-		return bookCover;
+	public String getCover() {
+		return cover;
 	}
 
-	public void setBookCover(String bookCover) {
-		this.bookCover = bookCover;
+	public void setCover(String bookCover) {
+		this.cover = bookCover;
 	}
 
 	public String getPdf() {
