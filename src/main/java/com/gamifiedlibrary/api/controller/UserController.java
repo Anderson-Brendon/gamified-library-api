@@ -20,7 +20,7 @@ import com.gamifiedlibrary.api.service.AppUserService;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/users")
 public class UserController {
 	
 	AppUserService appUserServices;

@@ -48,4 +48,8 @@ public class BookService {
 		return result;
 	}
 	
+	public List<Book> findBooksContainingText(String text) {
+		return bookRepository.findTop5ByTitleContainingIgnoreCase(text.trim());
+	}
+	
 }//Pageable pagination = PageRequest.of(Math.round(bookRepository.count() / page), size);

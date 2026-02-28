@@ -18,7 +18,7 @@ import com.gamifiedlibrary.api.domain.model.Book;
 import com.gamifiedlibrary.api.service.BookService;
 
 @RestController
-@RequestMapping("/book")
+@RequestMapping("/books")
 @CrossOrigin(origins = "http://localhost:3000")
 public class BookController {
 
@@ -57,10 +57,20 @@ public class BookController {
 		return ResponseEntity.ok().body(books);
 	}
 
-	@GetMapping("/book/count-pages/{items}")
+	@GetMapping("/like/{text}")
+	public ResponseEntity<List<Book>> getBooksWithSimilarText(@PathVariable String text)		
+	{
+		List<Book> books = bookService.findBooksContainingText(text);
+		if(books == null) {
+			return ResponseEntity.notFound().build();
+		}
+		return ResponseEntity.ok().body(books);
+	}
+
+	/*@GetMapping("/book/{}")
 	public ResponseEntity<Map<String, Integer>> getNumberOfPages(@PathVariable int items)		
 	{
 		HashMap<String, Integer> result = bookService.calculateNumberOfPages(items);
 		return ResponseEntity.ok().body(result);
-	}
+	}*/
 }
