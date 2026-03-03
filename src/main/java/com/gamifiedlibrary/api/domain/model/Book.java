@@ -1,7 +1,5 @@
 package com.gamifiedlibrary.api.domain.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -42,12 +40,10 @@ public class Book {
 	@NotBlank
 	private String slug;
 	
-	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "author_id")
 	Author author;
 	
-	@JsonIgnore
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "genre_id")
 	private Genre genre;
@@ -115,4 +111,12 @@ public class Book {
 	public void setAuthor(Author author) {
 		this.author = author;
 	}
+
+    public Genre getGenre() {
+        return genre;
+    }
+
+    public void setGenre(Genre genre) {
+        this.genre = genre;
+    }
 }

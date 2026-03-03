@@ -2,11 +2,16 @@ package com.gamifiedlibrary.api.repository;
 
 import java.util.List;
 
-import com.gamifiedlibrary.api.domain.model.Review;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-public interface ReviewRepository {
+import com.gamifiedlibrary.api.domain.model.Review;
+import com.gamifiedlibrary.api.domain.model.ReviewId;
+
+@Repository
+public interface ReviewRepository extends JpaRepository<Review, ReviewId> {
 	
-	public List<Review> findByBookId(int id);
+	public List<Review> findByBookId(Long id);
 	
-	public Review findByBookName(int id);
+	//public Review findByBookTitle(String title);
 }

@@ -61,7 +61,7 @@ INSERT INTO reading_list_book (user_id, book_id, current_page, is_complete) VALU
 INSERT INTO review (user_id, book_id, rate, comment) VALUES
 (1,1,5,'Excellent book'),(2,2,4,'Really enjoyed it'),(3,3,3,'Good but okay'),(4,4,5,'Loved it'),(5,5,2,'Not my taste'),
 (6,6,4,'Well written'),(7,7,5,'Inspiring'),(8,8,3,'Mixed feelings'),(9,9,4,'Scary and good'),(10,10,5,'A classic'),
-(11,11,4,'Nice poems'),(12,12,5,'Great for kids'),(13,13,3,'Thought-provoking'),(14,14,5,'Very useful'),(15,15,4,'Fun read');
+(11,11,4,'Nice poems'),(12,12,5,''),(13,13,3,'Thought-provoking'),(14,14,5,'Very useful'),(15,15,4,'Fun read');
 
 -- QUIZ_QUESTION
 INSERT INTO quiz_question (id, book_id, question_text, option_a, option_b, option_c, option_d, correct_answer) VALUES

@@ -1,8 +1,6 @@
 package com.gamifiedlibrary.api.controller;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -14,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
 import com.gamifiedlibrary.api.domain.model.Book;
 import com.gamifiedlibrary.api.service.BookService;
 
@@ -38,6 +37,8 @@ public class BookController {
 	public ResponseEntity<Book> getBookById(@PathVariable Long id){
 		try {
 			Book book = this.bookService.findBookById(id);
+			book.getAuthor();
+			book.getGenre();
 			return ResponseEntity.ok().body(book);
 		} catch (Exception e) {
 			return ResponseEntity.notFound().build();
