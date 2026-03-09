@@ -1,7 +1,6 @@
 package com.gamifiedlibrary.api.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.gamifiedlibrary.api.domain.service.QuizResultId;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -43,7 +42,7 @@ public class QuizResult {
 	
 	@Max(value = 10, message = "Value must be less than or equal to 10")
 	@NotNull
-	private int randonAnswersChoosed;
+	private int randomAnswersChoosed;
 
 	public QuizResultId getId() {
 		return id;
