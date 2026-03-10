@@ -59,15 +59,14 @@ public class AppUser {
 	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL)
 	List<QuizResult> quizResults = new ArrayList<QuizResult>();
 	
-	                             //indica que só vai buscar os dados ao acessar o campo
+	@JsonIgnore                            //indica que só vai buscar os dados ao acessar o campo
 	@OneToMany(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JsonIgnore
 	private Set<FavoriteBook> favoritesBooks = new HashSet<>();	
 	
 	@JsonIgnore
-	@OneToMany(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Set<ReadingListBook> booksOnList = new HashSet<>();
-	
+
 	@JsonIgnore
 	@OneToMany(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Set<Review> bookReviews = new HashSet<>();
@@ -89,6 +88,10 @@ public class AppUser {
 	
     public void removeBookFromList(Book book) {
 		this.booksOnList.removeIf(bookOnList -> bookOnList.getBook().equals(book));
+	}
+    
+    public Set<ReadingListBook> getBooksOnList() {
+		return booksOnList;
 	}
     
     public void addReview(Book book, int rate, String comment) {//aggregate root

@@ -2,7 +2,6 @@ package com.gamifiedlibrary.api.domain.model;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.gamifiedlibrary.api.domain.service.FavoriteBookId;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;

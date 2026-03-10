@@ -1,8 +1,6 @@
 package com.gamifiedlibrary.api.domain.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.gamifiedlibrary.api.domain.service.ReadingListBookId;
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;

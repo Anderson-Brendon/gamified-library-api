@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.gamifiedlibrary.api.domain.model.AppUser;
+import com.gamifiedlibrary.api.domain.model.ReadingListBook;
 import com.gamifiedlibrary.api.infrastructure.dto.appuser.AccountCreationDTO;
 import com.gamifiedlibrary.api.infrastructure.utils.PasswordService;
 import com.gamifiedlibrary.api.repository.AppUserRepository;
@@ -48,6 +49,7 @@ public class AppUserService {
 	public void deleteById(Long id) {
 		userRepository.deleteById(id);
 	}
+	
 
 	public void createUser(AccountCreationDTO accountCreationDTO) {
 		if(this.userRepository.existsByEmail(accountCreationDTO.email())){

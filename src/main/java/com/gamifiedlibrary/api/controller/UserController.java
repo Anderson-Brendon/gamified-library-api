@@ -13,32 +13,38 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.gamifiedlibrary.api.domain.model.AppUser;
+import com.gamifiedlibrary.api.domain.model.ReadingListBook;
+import com.gamifiedlibrary.api.infrastructure.book.FavoriteBookDTO;
+import com.gamifiedlibrary.api.infrastructure.book.ReadingListBookDTO;
 import com.gamifiedlibrary.api.infrastructure.dto.appuser.AccountCreationDTO;
 import com.gamifiedlibrary.api.infrastructure.utils.CustomAPIMessage;
 import com.gamifiedlibrary.api.service.AppUserService;
-
+import com.gamifiedlibrary.api.service.ReadingListService;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/users")
 public class UserController {
-	
+
 	AppUserService appUserServices;
-	
-	public UserController(AppUserService appUserServices) {
+
+	ReadingListService readingListService;
+
+	public UserController(AppUserService appUserServices, ReadingListService readingListService) {
 		this.appUserServices = appUserServices;
+		this.readingListService = readingListService;
 	}
-	
+
 	@GetMapping
 	public ResponseEntity<List<AppUser>> getAllUsers() {
-	    List<AppUser> users = appUserServices.findAllUsers();
-	    return ResponseEntity.ok().body(users);
+		List<AppUser> users = appUserServices.findAllUsers();
+		return ResponseEntity.ok().body(users);
 	}
-	
+
 	@GetMapping("/{id}")
 	public ResponseEntity<AppUser> getById(@PathVariable Long id) {
-			 AppUser user = appUserServices.findById(id);
-			 return ResponseEntity.ok().body(user);
+		AppUser user = appUserServices.findById(id);
+		return ResponseEntity.ok().body(user);
 	}
 
 	@PostMapping
@@ -49,8 +55,38 @@ public class UserController {
 		} catch (Exception e) {
 			return ResponseEntity.badRequest().body(CustomAPIMessage.setMessage("exception", e.getMessage()));
 		}
-		
+
 	}
-	
-	
+
+	@GetMapping("/reading-list/{userId}")
+	public ResponseEntity<List<ReadingListBookDTO>> getUserBooksOnReadingList(@PathVariable Long userId) {
+		
+		List<ReadingListBook> readingList = this.readingListService.findReadingListByUserId(userId);
+		
+		List<ReadingListBookDTO> readingListDTO = readingList.stream().map(userList -> 
+		new ReadingListBookDTO(
+				userList.getBook().getId(),
+				userList.getBook().getTitle(), userList.
+				getBook().getCover(), 
+				userList.getCurrentPage(),
+				userList.isComplete())).toList();
+		return ResponseEntity.ok().body(readingListDTO);
+	}
+
 }
+
+/*
+ * @GetMapping("/favorites/{userId}") public ResponseEntity<Set<FavoriteBook>>
+ * getUserFavorites(@PathVariable Long userId) { try { AppUser user =
+ * appUserServices.findById(userId); return
+ * ResponseEntity.ok().body(user.getFavoritesBooks()); } catch (Exception e) {
+ * return ResponseEntity.notFound().build(); }
+ * 
+ * }
+ * 
+ * @GetMapping("/reading-list/{userId}") public
+ * ResponseEntity<Set<ReadingListBook>> getUserReadingList(@PathVariable Long
+ * userId) { try { AppUser user = appUserServices.findById(userId); return
+ * ResponseEntity.ok().body(user.getBooksOnList()); } catch (Exception e) {
+ * return ResponseEntity.notFound().build(); } }
+ */
