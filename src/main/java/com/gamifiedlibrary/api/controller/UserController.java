@@ -13,12 +13,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.gamifiedlibrary.api.domain.model.AppUser;
-import com.gamifiedlibrary.api.domain.model.ReadingListBook;
-import com.gamifiedlibrary.api.infrastructure.book.FavoriteBookDTO;
-import com.gamifiedlibrary.api.infrastructure.book.ReadingListBookDTO;
 import com.gamifiedlibrary.api.infrastructure.dto.appuser.AccountCreationDTO;
+import com.gamifiedlibrary.api.infrastructure.dto.book.FavoriteBookDTO;
+import com.gamifiedlibrary.api.infrastructure.dto.book.ReadingListBookDTO;
 import com.gamifiedlibrary.api.infrastructure.utils.CustomAPIMessage;
 import com.gamifiedlibrary.api.service.AppUserService;
+import com.gamifiedlibrary.api.service.FavoriteBookService;
 import com.gamifiedlibrary.api.service.ReadingListService;
 
 @CrossOrigin(origins = "http://localhost:3000")
@@ -30,9 +30,13 @@ public class UserController {
 
 	ReadingListService readingListService;
 
-	public UserController(AppUserService appUserServices, ReadingListService readingListService) {
+	FavoriteBookService favoriteBookService;
+
+	public UserController(AppUserService appUserServices, ReadingListService readingListService,
+			FavoriteBookService favoriteBookService) {
 		this.appUserServices = appUserServices;
 		this.readingListService = readingListService;
+		this.favoriteBookService = favoriteBookService;
 	}
 
 	@GetMapping
@@ -61,16 +65,17 @@ public class UserController {
 	@GetMapping("/reading-list/{userId}")
 	public ResponseEntity<List<ReadingListBookDTO>> getUserBooksOnReadingList(@PathVariable Long userId) {
 		
-		List<ReadingListBook> readingList = this.readingListService.findReadingListByUserId(userId);
+		List<ReadingListBookDTO> readingList = this.readingListService.findReadingListByUserId(userId);
 		
-		List<ReadingListBookDTO> readingListDTO = readingList.stream().map(userList -> 
-		new ReadingListBookDTO(
-				userList.getBook().getId(),
-				userList.getBook().getTitle(), userList.
-				getBook().getCover(), 
-				userList.getCurrentPage(),
-				userList.isComplete())).toList();
-		return ResponseEntity.ok().body(readingListDTO);
+		return ResponseEntity.ok().body(readingList);
+	}
+
+	@GetMapping("/favorites/{userId}")
+	public ResponseEntity<List<FavoriteBookDTO>> getUserFavoritesBooks(@PathVariable Long userId) {
+		
+		List<FavoriteBookDTO> favorites = this.favoriteBookService.FindFavoritesBooksByUserId(userId);
+		
+		return ResponseEntity.ok().body(favorites);
 	}
 
 }

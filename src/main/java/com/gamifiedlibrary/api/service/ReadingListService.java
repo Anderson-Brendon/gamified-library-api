@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.gamifiedlibrary.api.domain.model.ReadingListBook;
+import com.gamifiedlibrary.api.infrastructure.dto.book.ReadingListBookDTO;
 import com.gamifiedlibrary.api.repository.ReadingListBookRepository;
 
 @Service
@@ -16,7 +16,15 @@ public class ReadingListService {
 		this.readingListRepository = readingListRepository;
 	}
 	
-	public List<ReadingListBook> findReadingListByUserId(Long userId) {
-		return readingListRepository.findByUserId(userId);
+	public List<ReadingListBookDTO> findReadingListByUserId(Long userId) {
+		List<ReadingListBookDTO> readingList = readingListRepository.findByUserId(userId).stream().map(userList -> 
+		new ReadingListBookDTO(
+				userList.getBook().getId(),
+				userList.getBook().getTitle(), 
+				userList.getBook().getCover(), 
+				userList.getCurrentPage(),
+				userList.isComplete())).toList();
+				
+		return readingList;
 	}
 }

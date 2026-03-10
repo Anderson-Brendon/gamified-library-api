@@ -1,4 +1,4 @@
-package com.gamifiedlibrary.api.infrastructure.book;
+package com.gamifiedlibrary.api.infrastructure.dto.book;
 
 //para livros que foram adicionados na lista de leitura ou nos favoritos
 

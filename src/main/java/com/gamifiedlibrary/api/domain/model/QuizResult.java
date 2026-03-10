@@ -1,6 +1,7 @@
 package com.gamifiedlibrary.api.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -65,11 +66,11 @@ public class QuizResult {
 	}
 
 	public int getRandonAnswersChoosed() {
-		return randonAnswersChoosed;
+		return randomAnswersChoosed;
 	}
 
 	public void setRandonAnswersChoosed(int randonAnswersChoosed) {
-		this.randonAnswersChoosed = randonAnswersChoosed;
+		this.randomAnswersChoosed = randonAnswersChoosed;
 	}
 	
 	
