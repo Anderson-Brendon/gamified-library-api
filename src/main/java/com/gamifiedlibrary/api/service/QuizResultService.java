@@ -4,9 +4,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.gamifiedlibrary.api.repository.QuizResultRepository;
 import com.gamifiedlibrary.api.domain.model.QuizResult;
-import com.gamifiedlibrary.api.infrastructure.leaderboard.UserLeaderboardDTO;
+import com.gamifiedlibrary.api.repository.QuizResultRepository;
 
 @Service
 public class QuizResultService {

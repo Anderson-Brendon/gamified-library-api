@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.gamifiedlibrary.api.domain.model.AppUser;
-import com.gamifiedlibrary.api.domain.model.ReadingListBook;
 import com.gamifiedlibrary.api.infrastructure.dto.appuser.AccountCreationDTO;
 import com.gamifiedlibrary.api.infrastructure.utils.PasswordService;
 import com.gamifiedlibrary.api.repository.AppUserRepository;

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import com.gamifiedlibrary.api.domain.model.QuizResult;
 import com.gamifiedlibrary.api.domain.model.QuizResultId;
-import com.gamifiedlibrary.api.infrastructure.leaderboard.UserLeaderboardDTO;
+import com.gamifiedlibrary.api.infrastructure.dto.leaderboard.UserLeaderboardDTO;
 
 @Repository
 public interface QuizResultRepository extends JpaRepository<QuizResult, QuizResultId> {

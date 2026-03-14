@@ -10,6 +10,8 @@ import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.S3Configuration;
+import software.amazon.awssdk.services.s3.presigner.S3Presigner;
 
 
 @Configuration
@@ -41,6 +43,21 @@ public class R2Config {
     	
     	return s3ClientInstance;
     	
+    }
+
+    @Bean
+    S3Presigner s3Presigner(){
+        var credentials = AwsBasicCredentials.create(accessKey, secretKey);
+    	
+    	var s3PresignerInstance = S3Presigner.builder().endpointOverride(URI.create(endpoint))
+        .credentialsProvider(StaticCredentialsProvider.create(credentials))
+        .region(Region.of("auto")).serviceConfiguration(
+            S3Configuration.builder()
+                .pathStyleAccessEnabled(true)
+                .build()
+        ).build();
+    	
+    	return s3PresignerInstance;
     }
     
 }

@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.gamifiedlibrary.api.infrastructure.leaderboard.UserLeaderboardDTO;
+import com.gamifiedlibrary.api.infrastructure.dto.leaderboard.UserLeaderboardDTO;
 import com.gamifiedlibrary.api.repository.QuizResultRepository;
 
 @Service
