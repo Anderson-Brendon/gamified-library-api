@@ -49,6 +49,9 @@ public class AppUserService {
 		userRepository.deleteById(id);
 	}
 	
+	public void updateUser(AppUser user) {
+		userRepository.save(user);
+	}
 
 	public void createUser(AccountCreationDTO accountCreationDTO) {
 		if(this.userRepository.existsByEmail(accountCreationDTO.email())){
