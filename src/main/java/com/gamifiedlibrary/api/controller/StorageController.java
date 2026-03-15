@@ -27,6 +27,8 @@ public class StorageController {
     JWTService jwtService;
     
     AppUserService appUserService;
+    
+    String r2Url = "https://pub-8e2d3a98b52c474a812811106fb89cf4.r2.dev/";
 
     public StorageController(StorageService storageService, JWTService jwtService, AppUserService appUserService) {
 		this.storageService = storageService;
@@ -35,16 +37,16 @@ public class StorageController {
 	}
 
 
-	@GetMapping("/profile-pic")
+	@GetMapping("/profile-pic/presigned-url")
     public ResponseEntity<Map<String, String>> getUrlToPutProfilePic(@RequestHeader(value = "Authorization", required = false) String authorizationHeader){
     	
 		try {
-    		String token = jwtService.extractBearerToken(authorizationHeader);
-    		System.out.println(token);
+    		String token = jwtService.extractBearerToken(authorizationHeader);	
     		Long id = jwtService.extractAllClaims(token).get("id", Long.class);
-    		System.out.println(id);
     		AppUser user = appUserService.findById(id);
     		String presignedUrl = storageService.createPresignedUrlToPut("profile-pic/", user.getUsername());
+    		user.setProfilePic(r2Url + "profile-pic/" + user.getUsername());
+    		appUserService.updateUser(user);
             return ResponseEntity.ok().body(CustomAPIMessage.setMessage("presignedUrl", presignedUrl));
     	}
     	catch(Exception e) {
