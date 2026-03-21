@@ -12,4 +12,7 @@ public interface ReadingListBookRepository extends JpaRepository<ReadingListBook
 
 	public List<ReadingListBook> findByUserId(Long id);
 	
+	public List<ReadingListBook> findByUserIdAndCompleteTrue(Long id);
+
+	public List<ReadingListBook> findByUserIdAndCompleteFalse(Long id);
 }

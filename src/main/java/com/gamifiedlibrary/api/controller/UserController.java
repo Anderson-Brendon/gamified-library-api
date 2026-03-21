@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.gamifiedlibrary.api.domain.model.AppUser;
@@ -74,9 +75,16 @@ public class UserController {
 	}
 
 	@GetMapping("/reading-list/{userId}")
-	public ResponseEntity<List<ReadingListBookDTO>> getUserBooksOnReadingList(@PathVariable Long userId) {
-		
-		List<ReadingListBookDTO> readingList = this.readingListService.findReadingListByUserId(userId);
+	public ResponseEntity<List<ReadingListBookDTO>> getUserBooksOnReadingList(@PathVariable Long userId, @RequestParam(required = false) Boolean completed) {
+		List<ReadingListBookDTO> readingList;
+
+		if(completed == null){
+			readingList = this.readingListService.findReadingListByUserId(userId);
+		}else if(completed){
+			readingList = this.readingListService.findBooksFromReadingListCompleted(userId);
+		}else{
+			readingList = this.readingListService.findBooksFromReadingListUnfinished(userId);
+		}
 		
 		return ResponseEntity.ok().body(readingList);
 	}

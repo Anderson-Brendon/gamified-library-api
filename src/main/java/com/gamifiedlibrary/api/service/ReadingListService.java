@@ -23,7 +23,31 @@ public class ReadingListService {
 				userList.getBook().getTitle(), 
 				userList.getBook().getCover(), 
 				userList.getCurrentPage(),
-				userList.isComplete())).toList();
+				userList.getIsComplete())).toList();
+				
+		return readingList;
+	}
+
+	public List<ReadingListBookDTO> findBooksFromReadingListCompleted(Long userId) {
+		List<ReadingListBookDTO> readingList = readingListRepository.findByUserIdAndCompleteTrue(userId).stream().map(userList -> 
+		new ReadingListBookDTO(
+				userList.getBook().getId(),
+				userList.getBook().getTitle(), 
+				userList.getBook().getCover(), 
+				userList.getCurrentPage(),
+				userList.getIsComplete())).toList();
+				
+		return readingList;
+	}
+
+	public List<ReadingListBookDTO> findBooksFromReadingListUnfinished(Long userId) {
+		List<ReadingListBookDTO> readingList = readingListRepository.findByUserIdAndCompleteFalse(userId).stream().map(userList -> 
+		new ReadingListBookDTO(
+				userList.getBook().getId(),
+				userList.getBook().getTitle(), 
+				userList.getBook().getCover(), 
+				userList.getCurrentPage(),
+				userList.getIsComplete())).toList();
 				
 		return readingList;
 	}

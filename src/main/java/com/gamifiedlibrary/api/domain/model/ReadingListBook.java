@@ -1,6 +1,7 @@
 package com.gamifiedlibrary.api.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
@@ -16,12 +17,12 @@ public class ReadingListBook {
 		
 	}
 	
-    public ReadingListBook(AppUser user, Book book, int currentPage, boolean isComplete) {
+    public ReadingListBook(AppUser user, Book book, int currentPage, boolean complete) {
 		this.book = book;
 		this.user = user;
 		this.id = new ReadingListBookId(user.getId(), book.getId());
 		this.currentPage = currentPage;
-		this.isComplete = isComplete;
+		this.complete = complete;
 	}
 	
 	@EmbeddedId
@@ -42,8 +43,16 @@ public class ReadingListBook {
 	private int currentPage;
 	
 	@Column(nullable = false)
-	private boolean isComplete;
+	private boolean complete;
 	
+	public boolean getIsComplete() {
+		return complete;
+	}
+
+	public void setComplete(boolean complete) {
+		this.complete = complete;
+	}
+
 	public AppUser getUser() {
 		return user;
 	}
@@ -66,14 +75,6 @@ public class ReadingListBook {
 
 	public void setCurrentPage(int currentPage) {
 		this.currentPage = currentPage;
-	}
-
-	public boolean isComplete() {
-		return isComplete;
-	}
-
-	public void setComplete(boolean isComplete) {
-		this.isComplete = isComplete;
 	}
 	
 }
