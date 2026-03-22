@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,6 +25,7 @@ import com.gamifiedlibrary.api.domain.model.ReadingListBook;
 import com.gamifiedlibrary.api.infrastructure.dto.appuser.AccountCreationDTO;
 import com.gamifiedlibrary.api.infrastructure.dto.book.FavoriteBookDTO;
 import com.gamifiedlibrary.api.infrastructure.dto.book.ReadingListBookDTO;
+import com.gamifiedlibrary.api.infrastructure.dto.book.ReadingListUpdateDTO;
 import com.gamifiedlibrary.api.infrastructure.utils.CustomAPIMessage;
 import com.gamifiedlibrary.api.infrastructure.utils.JWTService;
 import com.gamifiedlibrary.api.service.AppUserService;
@@ -107,6 +109,12 @@ public class UserController {
 		Optional<ReadingListBook> optionalBook = user.getBooksOnList().stream()
 		.filter((book -> Objects.equals(book.getBook().getId(), bookId))).
 		findFirst();
+
+		Boolean isCompleted = optionalBook.get().getIsComplete();
+
+		if(isCompleted){
+			return ResponseEntity.badRequest().body(CustomAPIMessage.setMessage("exception", "Book marked as complete can't be removed"));
+		}
 		
 		if(optionalBook.isPresent()) {
 			user.removeBookFromList(optionalBook.get().getBook());
@@ -151,6 +159,32 @@ public class UserController {
 		
 		return ResponseEntity.notFound().build();
 	}
+	
+	@PatchMapping("reading-list/{bookId}")
+	public ResponseEntity<Map<String, String>> updateBookFromReadingList(@RequestHeader(value = "Authorization", required = false) String authorizationHeader , @PathVariable Long bookId, @RequestBody ReadingListUpdateDTO dto) {
+		
+		String token;
+		
+		Long id;
+		
+		try {
+			token = jwtService.extractBearerToken(authorizationHeader);	
+			id = jwtService.extractAllClaims(token).get("id", Long.class);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+   				 .body(CustomAPIMessage.setMessage("exception", "Unauthorized"));
+		}
+		
+		try {
+			readingListService.updateBookFromReadingList(id, bookId, dto);
+			return ResponseEntity.ok().body(CustomAPIMessage.setMessage("success", "Book from list was updated"));
+		} catch (Exception e) {
+			return ResponseEntity.notFound().build();
+		}
+
+	}
+	
+	
 
 }
 

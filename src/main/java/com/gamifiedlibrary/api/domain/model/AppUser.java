@@ -82,7 +82,7 @@ public class AppUser {
 		this.favoritesBooks.removeIf(f -> f.getBook().equals(book));
 	}
     
-    public void addBookOnList(Book book) {
+    public void addBookToList(Book book) {
 		this.booksOnList.add(new ReadingListBook(this, book, 0, false));
 	}
 	
