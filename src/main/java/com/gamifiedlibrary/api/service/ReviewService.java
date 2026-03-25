@@ -26,4 +26,8 @@ public class ReviewService {
         return reviews;
     }
     
+    public float findAverageBookRate(Long bookId){
+    	return this.reviewRepository.findAverageBookRate(bookId);
+    }
+    
 }

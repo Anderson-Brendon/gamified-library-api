@@ -37,7 +37,7 @@ public class AppUser {
 	private Long id;
 	
 	@NotBlank
-	@Size(min = 6, max = 15, message = "Name must be between 6 and 16 characters long.")
+	@Size(min = 6, max = 15, message = "Name must be between 6 and 15 characters long.")
 	@Column(unique=true)
 	private String username;
 	

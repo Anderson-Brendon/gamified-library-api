@@ -14,7 +14,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.gamifiedlibrary.api.domain.model.Book;
+import com.gamifiedlibrary.api.infrastructure.dto.book.BookDetailDTO;
 import com.gamifiedlibrary.api.service.BookService;
+
+import jakarta.persistence.EntityNotFoundException;
 
 @RestController
 @RequestMapping("/books")
@@ -34,13 +37,11 @@ public class BookController {
 	}*/
 
 	@GetMapping("/{id}")
-	public ResponseEntity<Book> getBookById(@PathVariable Long id){
+	public ResponseEntity<BookDetailDTO> getBookById(@PathVariable Long id){
 		try {
-			Book book = this.bookService.findBookById(id);
-			book.getAuthor();
-			book.getGenre();
+			BookDetailDTO book = this.bookService.findBookById(id);
 			return ResponseEntity.ok().body(book);
-		} catch (Exception e) {
+		} catch (EntityNotFoundException e) {
 			return ResponseEntity.notFound().build();
 		}
 	}

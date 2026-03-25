@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.gamifiedlibrary.api.domain.model.Book;
+import com.gamifiedlibrary.api.infrastructure.dto.book.BookDetailDTO;
 import com.gamifiedlibrary.api.repository.BookRepository;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -14,19 +15,27 @@ import jakarta.persistence.EntityNotFoundException;
 @Service
 public class BookService {
 	
-	public BookService(BookRepository bookRepository) {
+	public BookService(BookRepository bookRepository, ReviewService reviewService) {
 		this.bookRepository = bookRepository;
+		this.reviewService = reviewService;
 	}
 	
 	private BookRepository bookRepository;
+	
+	private ReviewService reviewService;
 	
 	public List<Book> findAllBooks(){
 		return bookRepository.findAll();
 	}
 	
-	public Book findBookById(Long id){
+	public BookDetailDTO findBookById(Long id){
+		System.out.println(bookRepository.findAll().getFirst().getId());
 		Book book = bookRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Book not found"));
-		return book;
+		Float averageRating = reviewService.findAverageBookRate(id);
+		return new BookDetailDTO(book.getId(), book.getTitle(),book.getCover() ,book.getDescription(),
+				book.getReleaseYear(), book.getPdf(), book.getAuthor(),
+				book.getGenre(), averageRating);
+		
 	}
 	
 	public Page<Book> findPaginated(Pageable pageable) {
