@@ -15,4 +15,6 @@ public interface ReadingListBookRepository extends JpaRepository<ReadingListBook
 	public List<ReadingListBook> findByUserIdAndCompleteTrue(Long id);
 
 	public List<ReadingListBook> findByUserIdAndCompleteFalse(Long id);
+
+	public Boolean existsByBookIdAndUserId(Long bookId, Long userId);
 }

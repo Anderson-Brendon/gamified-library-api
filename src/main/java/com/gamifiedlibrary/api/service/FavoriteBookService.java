@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.gamifiedlibrary.api.domain.model.Book;
 import com.gamifiedlibrary.api.infrastructure.dto.book.FavoriteBookDTO;
 import com.gamifiedlibrary.api.repository.FavoriteBookRepository;
 

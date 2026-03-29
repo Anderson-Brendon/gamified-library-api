@@ -4,14 +4,14 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.gamifiedlibrary.api.domain.model.AppUser;
+import com.gamifiedlibrary.api.domain.model.Book;
 import com.gamifiedlibrary.api.domain.model.ReadingListBook;
 import com.gamifiedlibrary.api.infrastructure.dto.book.ReadingListBookDTO;
 import com.gamifiedlibrary.api.infrastructure.dto.book.ReadingListUpdateDTO;
-import com.gamifiedlibrary.api.infrastructure.utils.CustomAPIMessage;
+import com.gamifiedlibrary.api.repository.BookRepository;
 import com.gamifiedlibrary.api.repository.ReadingListBookRepository;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -19,14 +19,18 @@ import jakarta.persistence.EntityNotFoundException;
 @Service
 public class ReadingListService {
 	
-	private ReadingListBookRepository readingListRepository;
+
+    private ReadingListBookRepository readingListRepository;
 	
 	private AppUserService appUserServices;
 
-	public ReadingListService(ReadingListBookRepository readingListRepository, AppUserService appUserServices) {
-		this.readingListRepository = readingListRepository;
-		this.appUserServices = appUserServices;
-	}
+	private BookService bookService;
+
+    public ReadingListService(AppUserService appUserServices, BookService bookService, ReadingListBookRepository readingListRepository, BookRepository bookRepository) {
+        this.appUserServices = appUserServices;
+        this.bookService = bookService;
+        this.readingListRepository = readingListRepository;
+    }
 	
 	public List<ReadingListBookDTO> findReadingListByUserId(Long userId) {
 		List<ReadingListBookDTO> readingList = readingListRepository.findByUserId(userId).stream().map(userList -> 
@@ -91,6 +95,17 @@ public class ReadingListService {
 		}else {
 			throw new EntityNotFoundException(("Book not found in reading list"));
 		}
+	}
+
+	public void addBookToUserReadingList(Long userId, Long bookId){
+		Book book = bookService.findEntityById(bookId);
+		AppUser user = appUserServices.findById(userId);
+		user.addBookToList(book);
+		appUserServices.updateUser(user);
+	}
+
+	public boolean isBookOnUserList(Long userId, Long bookId){
+		return readingListRepository.existsByBookIdAndUserId(bookId, userId);
 	}
 	
 }

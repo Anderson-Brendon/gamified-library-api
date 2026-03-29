@@ -10,6 +10,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -83,6 +84,10 @@ public class AppUser {
 	}
     
     public void addBookToList(Book book) {
+    	boolean exists = this.booksOnList.stream().anyMatch(b -> b.getBook().getId() == book.getId());
+    	if(exists) {
+    		throw new EntityExistsException("Book already in list");
+    	}
 		this.booksOnList.add(new ReadingListBook(this, book, 0, false));
 	}
 	

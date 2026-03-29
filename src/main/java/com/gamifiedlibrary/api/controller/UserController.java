@@ -77,7 +77,7 @@ public class UserController {
 	}
 
 	@GetMapping("/reading-list/{userId}")
-	public ResponseEntity<List<ReadingListBookDTO>> getUserBooksOnReadingList(@PathVariable Long userId, @RequestParam(required = false) Boolean completed) {
+	public ResponseEntity<List<ReadingListBookDTO>> getAllUserBooksOnReadingList(@PathVariable Long userId, @RequestParam(required = false) Boolean completed) {
 		List<ReadingListBookDTO> readingList;
 
 		if(completed == null){
@@ -126,7 +126,7 @@ public class UserController {
 	}
 
 	@GetMapping("/favorites/{userId}")
-	public ResponseEntity<List<FavoriteBookDTO>> getUserFavoritesBooks(@PathVariable Long userId) {
+	public ResponseEntity<List<FavoriteBookDTO>> getUserFavoriteBooks(@PathVariable Long userId) {
 		
 		List<FavoriteBookDTO> favorites = this.favoriteBookService.FindFavoritesBooksByUserId(userId);
 		
@@ -160,7 +160,7 @@ public class UserController {
 		return ResponseEntity.notFound().build();
 	}
 	
-	@PatchMapping("reading-list/{bookId}")
+	@PatchMapping("/reading-list/{bookId}")
 	public ResponseEntity<Map<String, String>> updateBookFromReadingList(@RequestHeader(value = "Authorization", required = false) String authorizationHeader , @PathVariable Long bookId, @RequestBody ReadingListUpdateDTO dto) {
 		
 		String token;
@@ -184,7 +184,29 @@ public class UserController {
 
 	}
 	
-	
+	@PostMapping("/reading-list/{bookId}")
+	public ResponseEntity<Map<String, String>> saveBookOnList(@RequestHeader(value = "Authorization", required = false) String authorizationHeader , @PathVariable Long bookId) {
+		String token;
+		
+		Long id;
+		
+		try {
+			token = jwtService.extractBearerToken(authorizationHeader);	
+			id = jwtService.extractAllClaims(token).get("id", Long.class);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+   				 .body(CustomAPIMessage.setMessage("exception", "Unauthorized"));
+		}
+
+		try {
+			readingListService.addBookToUserReadingList(id, bookId);
+			return ResponseEntity.ok().body(CustomAPIMessage.setMessage("success", "Book added to user list"));
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			return ResponseEntity.badRequest().body(CustomAPIMessage.setMessage("exception", e.getMessage()));
+		}
+
+	}
 
 }
 

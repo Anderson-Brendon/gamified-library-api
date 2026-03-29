@@ -2,6 +2,7 @@ package com.gamifiedlibrary.api.service;
 
 import java.util.HashMap;
 import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -36,6 +37,11 @@ public class BookService {
 				book.getReleaseYear(), book.getPdf(), book.getAuthor(),
 				book.getGenre(), averageRating);
 		
+	}
+
+	public Book findEntityById(Long bookId){
+		Book book = bookRepository.findById(bookId).orElseThrow(() -> new EntityNotFoundException("Book not found"));
+		return book;
 	}
 	
 	public Page<Book> findPaginated(Pageable pageable) {
