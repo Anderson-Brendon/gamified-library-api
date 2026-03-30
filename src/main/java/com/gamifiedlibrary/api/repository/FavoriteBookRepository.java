@@ -13,11 +13,13 @@ public interface FavoriteBookRepository extends JpaRepository<FavoriteBook, Favo
 	
     public List<FavoriteBook> findByUserId(Long userId);
 	
-	/*public Optional<FavoriteBook> findById(int userId, int bookId);
+    public boolean existsByBookIdAndUserId(Long bookId, Long userId);
 	
-	public FavoriteBook create (AppUser user, Book book);
-	
-	public Book update(int userId, int bookId);
-	
-	public boolean delete(int id);*/
 }
+/*public Optional<FavoriteBook> findById(int userId, int bookId);
+
+public FavoriteBook create (AppUser user, Book book);
+
+public Book update(int userId, int bookId);
+
+public boolean delete(int id);*/

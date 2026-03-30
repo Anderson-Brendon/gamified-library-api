@@ -185,7 +185,7 @@ public class UserController {
 	}
 	
 	@PostMapping("/reading-list/{bookId}")
-	public ResponseEntity<Map<String, String>> saveBookOnList(@RequestHeader(value = "Authorization", required = false) String authorizationHeader , @PathVariable Long bookId) {
+	public ResponseEntity<Map<String, String>> saveBookOnReadingList(@RequestHeader(value = "Authorization", required = false) String authorizationHeader , @PathVariable Long bookId) {
 		String token;
 		
 		Long id;
@@ -200,6 +200,30 @@ public class UserController {
 
 		try {
 			readingListService.addBookToUserReadingList(id, bookId);
+			return ResponseEntity.ok().body(CustomAPIMessage.setMessage("success", "Book added to user list"));
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			return ResponseEntity.badRequest().body(CustomAPIMessage.setMessage("exception", e.getMessage()));
+		}
+
+	}
+	
+	@PostMapping("/favorites/{bookId}")
+	public ResponseEntity<Map<String, String>> saveBookOnFavorites(@RequestHeader(value = "Authorization", required = false) String authorizationHeader , @PathVariable Long bookId) {
+		String token;
+		
+		Long id;
+		
+		try {
+			token = jwtService.extractBearerToken(authorizationHeader);	
+			id = jwtService.extractAllClaims(token).get("id", Long.class);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+   				 .body(CustomAPIMessage.setMessage("exception", "Unauthorized"));
+		}
+
+		try {
+			favoriteBookService.addBookToUserFavorites(id, bookId);
 			return ResponseEntity.ok().body(CustomAPIMessage.setMessage("success", "Book added to user list"));
 		} catch (Exception e) {
 			System.out.println(e.getMessage());

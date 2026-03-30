@@ -76,6 +76,10 @@ public class AppUser {
 	private String verificationCode;
 	
 	public void addBookAsFavorite(Book book) {//aggregate root
+		boolean exists = this.favoritesBooks.stream().anyMatch(b -> b.getBook().equals(book));
+		if(exists) {
+			throw new EntityExistsException("Book is already a user favorite");
+		}
 		this.favoritesBooks.add(new FavoriteBook(this, book));
 	}
 	

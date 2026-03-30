@@ -11,8 +11,6 @@ import com.gamifiedlibrary.api.infrastructure.dto.ReadingListCheckDTO;
 import com.gamifiedlibrary.api.service.ReadingListService;
 
 @CrossOrigin(origins = "http://localhost:3000")
-
-
 @RestController
 @RequestMapping("/reading-list")
 public class ReadingListController {
