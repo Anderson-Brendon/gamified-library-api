@@ -32,4 +32,12 @@ public class ReviewController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @GetMapping("/{bookId}/user/{userId}")
+    public ResponseEntity<Review> getReviewByUserIdAndBookId(@PathVariable Long userId, @PathVariable Long bookId){
+        
+        Review review = this.reviewService.findReviewByUserIdAndBookId(bookId, userId);
+        return ResponseEntity.ok().body(review);
+
+    }
 }

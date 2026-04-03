@@ -49,7 +49,7 @@ public class BookService {
 	}
 	
 	public Book findByTitle(String title) {
-		Book book = bookRepository.findByTitle(title).orElseThrow(() -> new EntityNotFoundException("Book not found"));
+		Book book = bookRepository.findByTitle(title).orElseThrow(() -> new EntityNotFoundException("No books with similar text found"));
 		return book;
 	};
 	

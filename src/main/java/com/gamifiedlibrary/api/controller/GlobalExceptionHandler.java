@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.gamifiedlibrary.api.infrastructure.dto.ExceptionResponseDTO;
 
+import io.jsonwebtoken.JwtException;
 import jakarta.persistence.EntityNotFoundException;
 
 @RestControllerAdvice
@@ -14,13 +15,27 @@ public class GlobalExceptionHandler {
 
     // Captura exceções de recurso não encontrado
     @ExceptionHandler(EntityNotFoundException.class)
-    public ResponseEntity<ExceptionResponseDTO> handleNotFound(EntityNotFoundException ex) {
+    public ResponseEntity<ExceptionResponseDTO> entityNotFound(EntityNotFoundException ex) {
     	ExceptionResponseDTO error = new ExceptionResponseDTO(ex.getMessage(), HttpStatus.NOT_FOUND.toString());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
     }
+    
+    @ExceptionHandler(JwtException.class)
+    public ResponseEntity<ExceptionResponseDTO> invalidJwt(JwtException ex) {
+    	ExceptionResponseDTO error = new ExceptionResponseDTO("Invalid token", HttpStatus.UNAUTHORIZED.toString());
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
+    }
 
+    // Captura exceções de recurso já existente
     
 }
+
+
+
+
+
+
+
 /*
  * // Captura erros de validação do @Valid / @Validated
     @ExceptionHandler(MethodArgumentNotValidException.class)

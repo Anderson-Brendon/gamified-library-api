@@ -17,8 +17,6 @@ import com.gamifiedlibrary.api.domain.model.Book;
 import com.gamifiedlibrary.api.infrastructure.dto.book.BookDetailDTO;
 import com.gamifiedlibrary.api.service.BookService;
 
-import jakarta.persistence.EntityNotFoundException;
-
 @RestController
 @RequestMapping("/books")
 @CrossOrigin(origins = "http://localhost:3000")
@@ -38,12 +36,8 @@ public class BookController {
 
 	@GetMapping("/{id}")
 	public ResponseEntity<BookDetailDTO> getBookById(@PathVariable Long id){
-		try {
 			BookDetailDTO book = this.bookService.findBookById(id);
 			return ResponseEntity.ok().body(book);
-		} catch (EntityNotFoundException e) {
-			return ResponseEntity.notFound().build();
-		}
 	}
 
 	@GetMapping
@@ -63,16 +57,14 @@ public class BookController {
 	public ResponseEntity<List<Book>> getBooksWithSimilarText(@PathVariable String text)		
 	{
 		List<Book> books = bookService.findBooksContainingText(text);
-		if(books == null) {
-			return ResponseEntity.notFound().build();
-		}
 		return ResponseEntity.ok().body(books);
 	}
 
-	/*@GetMapping("/book/{}")
+	
+}
+/*@GetMapping("/book/{}")
 	public ResponseEntity<Map<String, Integer>> getNumberOfPages(@PathVariable int items)		
 	{
 		HashMap<String, Integer> result = bookService.calculateNumberOfPages(items);
 		return ResponseEntity.ok().body(result);
 	}*/
-}
