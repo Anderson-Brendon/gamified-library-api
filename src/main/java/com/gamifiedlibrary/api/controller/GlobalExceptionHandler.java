@@ -9,6 +9,7 @@ import com.gamifiedlibrary.api.infrastructure.dto.ExceptionResponseDTO;
 
 import io.jsonwebtoken.JwtException;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.persistence.EntityExistsException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -25,9 +26,15 @@ public class GlobalExceptionHandler {
     	ExceptionResponseDTO error = new ExceptionResponseDTO("Invalid token", HttpStatus.UNAUTHORIZED.toString());
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
     }
+    
+    @ExceptionHandler
+    public ResponseEntity<ExceptionResponseDTO> entityExistsException(EntityExistsException ex) {
+    	ExceptionResponseDTO error = new ExceptionResponseDTO(ex.getMessage(), HttpStatus.CONFLICT.toString());
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
+    }
 
     // Captura exceções de recurso já existente
-    
+   
 }
 
 

@@ -104,6 +104,10 @@ public class AppUser {
 	}
     
     public void addReview(Book book, int rate, String comment) {//aggregate root
+    	boolean exists = this.bookReviews.stream().anyMatch(b -> b.getBook().getId() == book.getId());
+    	if(exists) {
+    		throw new EntityExistsException("The book has a review from the user.");
+    	}
 		this.bookReviews.add(new Review(this, book, rate, comment));
 	}
     

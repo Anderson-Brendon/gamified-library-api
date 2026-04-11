@@ -13,27 +13,32 @@ public class ReviewId implements Serializable {
 		
 	}
 
+	public ReviewId(Long userId, Long bookId) {
+		this.userId = userId;
+		this.bookId = bookId;
+	}
+
 	private static final long serialVersionUID = 1L;
 
 	@Column(name = "user_id")
-	private int userId;
+	private Long userId;
 	
 	@Column(name = "book_id")
-	private int bookId;
+	private Long bookId;
 
-	public int getUserId() {
+	public Long getUserId() {
 		return userId;
 	}
 
-	public void setUserId(int userId) {
+	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
 
-	public int getBookId() {
+	public Long getBookId() {
 		return bookId;
 	}
 
-	public void setBookId(int bookId) {
+	public void setBookId(Long bookId) {
 		this.bookId = bookId;
 	}
 
@@ -51,7 +56,7 @@ public class ReviewId implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		ReviewId other = (ReviewId) obj;
-		return bookId == other.bookId && userId == other.userId;
+		return Objects.equals(bookId, other.bookId) && Objects.equals(userId, other.userId);
 	}
 	
 	

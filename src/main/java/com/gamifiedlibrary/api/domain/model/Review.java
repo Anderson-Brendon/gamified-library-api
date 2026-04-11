@@ -26,6 +26,7 @@ public class Review {
 		this.book = book;
 		this.rate = rate;
 		this.comment = comment;
+		this.id = new ReviewId(user.getId(), book.getId());
 	}
 	
 	@EmbeddedId

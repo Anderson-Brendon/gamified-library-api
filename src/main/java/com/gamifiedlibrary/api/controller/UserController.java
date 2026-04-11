@@ -4,6 +4,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import com.gamifiedlibrary.api.service.ReviewService;
+
+import software.amazon.awssdk.http.HttpStatusCode;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.gamifiedlibrary.api.domain.model.AppUser;
 import com.gamifiedlibrary.api.domain.model.FavoriteBook;
 import com.gamifiedlibrary.api.domain.model.ReadingListBook;
+import com.gamifiedlibrary.api.infrastructure.dto.ReviewCreationDTO;
 import com.gamifiedlibrary.api.infrastructure.dto.appuser.AccountCreationDTO;
 import com.gamifiedlibrary.api.infrastructure.dto.book.FavoriteBookDTO;
 import com.gamifiedlibrary.api.infrastructure.dto.book.ReadingListBookDTO;
@@ -37,6 +41,8 @@ import com.gamifiedlibrary.api.service.ReadingListService;
 @RequestMapping("/users")
 public class UserController {
 
+    private final ReviewService reviewService;
+
 	AppUserService appUserServices;
 
 	ReadingListService readingListService;
@@ -46,11 +52,12 @@ public class UserController {
 	JWTService jwtService;
 
 	public UserController(AppUserService appUserServices, ReadingListService readingListService,
-			FavoriteBookService favoriteBookService, JWTService jwtService) {
+			FavoriteBookService favoriteBookService, JWTService jwtService, ReviewService reviewService) {
 		this.appUserServices = appUserServices;
 		this.readingListService = readingListService;
 		this.favoriteBookService = favoriteBookService;
 		this.jwtService = jwtService;
+		this.reviewService = reviewService;
 	}
 
 	@GetMapping
@@ -230,6 +237,21 @@ public class UserController {
 			return ResponseEntity.badRequest().body(CustomAPIMessage.setMessage("exception", e.getMessage()));
 		}
 
+	}
+	
+	@PostMapping("/reviews/{bookId}")
+	public ResponseEntity<Map<String, String>> addUserReview(@RequestHeader(value = "Authorization", required = false) String authorizationHeader , @PathVariable Long bookId, @RequestBody ReviewCreationDTO review) {
+		String token;
+		
+		Long userId;
+		
+		token = jwtService.extractBearerToken(authorizationHeader);	
+		userId = jwtService.extractAllClaims(token).get("id", Long.class);
+		
+		reviewService.addReview(userId, bookId, review.rate(), review.comment());
+		
+		return ResponseEntity.status(HttpStatusCode.CREATED).body(CustomAPIMessage.setMessage("success", "Review was created"));
+		
 	}
 
 }

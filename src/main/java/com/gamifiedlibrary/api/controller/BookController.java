@@ -1,21 +1,30 @@
 package com.gamifiedlibrary.api.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.gamifiedlibrary.api.domain.model.Book;
+import com.gamifiedlibrary.api.infrastructure.dto.ReviewCreationDTO;
 import com.gamifiedlibrary.api.infrastructure.dto.book.BookDetailDTO;
+import com.gamifiedlibrary.api.infrastructure.utils.CustomAPIMessage;
+import com.gamifiedlibrary.api.infrastructure.utils.JWTService;
 import com.gamifiedlibrary.api.service.BookService;
+import com.gamifiedlibrary.api.service.ReviewService;
 
 @RestController
 @RequestMapping("/books")
@@ -23,9 +32,15 @@ import com.gamifiedlibrary.api.service.BookService;
 public class BookController {
 
 	BookService bookService;
-
-	public BookController(BookService bookService) {
+	
+	private JWTService jwtService;
+	
+	private ReviewService reviewService;
+	
+	public BookController(BookService bookService, JWTService jwtService, ReviewService reviewService) {
 		this.bookService = bookService;
+		this.jwtService = jwtService;
+		this.reviewService = reviewService;
 	}
 
 	/*@GetMapping
@@ -59,6 +74,24 @@ public class BookController {
 		List<Book> books = bookService.findBooksContainingText(text);
 		return ResponseEntity.ok().body(books);
 	}
+	
+	@PostMapping("/{bookId}/review")
+    public ResponseEntity<Map<String, String>> postUserReview(@RequestHeader(value = "Authorization", required = false) String authorizationHeader, @RequestBody ReviewCreationDTO reviewDTO, @PathVariable Long bookId) {
+    	
+		String token;
+		Long userId;
+		
+		token = jwtService.extractBearerToken(authorizationHeader);	
+		
+		userId = jwtService.extractAllClaims(token).get("id", Long.class);
+		
+		System.out.println(reviewDTO.comment());
+		
+        reviewService.addReview(userId , bookId, reviewDTO.rate(), reviewDTO.comment());
+        
+        return ResponseEntity.status(HttpStatus.CREATED).body(CustomAPIMessage.setMessage("success", "Review from user with id " + userId + " was added for book with id " + bookId));
+        
+    }
 
 	
 }
