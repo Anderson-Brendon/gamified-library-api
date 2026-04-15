@@ -57,5 +57,15 @@ public class ReviewService {
 		userService.updateUser(user);
 
 	}
+	
+	public void updateReview(Long userId, Long bookId, int rate, String comment) {
+		
+		AppUser user = userService.findById(userId);
+
+		user.editReview(bookId, rate, comment);
+		
+		userService.updateUser(user);
+
+	}
 
 }

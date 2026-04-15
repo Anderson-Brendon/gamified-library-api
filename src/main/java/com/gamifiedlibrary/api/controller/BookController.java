@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.gamifiedlibrary.api.domain.model.Book;
-import com.gamifiedlibrary.api.infrastructure.dto.ReviewCreationDTO;
+import com.gamifiedlibrary.api.infrastructure.dto.ReviewPostingDTO;
 import com.gamifiedlibrary.api.infrastructure.dto.book.BookDetailDTO;
 import com.gamifiedlibrary.api.infrastructure.utils.CustomAPIMessage;
 import com.gamifiedlibrary.api.infrastructure.utils.JWTService;
@@ -76,7 +76,7 @@ public class BookController {
 	}
 	
 	@PostMapping("/{bookId}/review")
-    public ResponseEntity<Map<String, String>> postUserReview(@RequestHeader(value = "Authorization", required = false) String authorizationHeader, @RequestBody ReviewCreationDTO reviewDTO, @PathVariable Long bookId) {
+    public ResponseEntity<Map<String, String>> postUserReview(@RequestHeader(value = "Authorization", required = false) String authorizationHeader, @RequestBody ReviewPostingDTO reviewDTO, @PathVariable Long bookId) {
     	
 		String token;
 		Long userId;

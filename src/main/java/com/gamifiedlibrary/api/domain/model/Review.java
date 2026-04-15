@@ -53,9 +53,9 @@ public class Review {
 	@NotBlank
 	private String comment;
 
-	public void update(int rate, String comment) {
-		this.rate = rate;
-		this.rate = rate;
+	public void updateReview(int rate, String comment) {
+		this.setRate(rate);
+		this.setComment(comment);
 	}
 	
 	public AppUser getUser() {
@@ -79,6 +79,9 @@ public class Review {
 	}
 
 	public void setRate(int rate) {
+		if(rate < 1) {
+			throw new IllegalArgumentException("Book rate can't be smaller than 1");
+		}
 		this.rate = rate;
 	}
 
@@ -87,6 +90,9 @@ public class Review {
 	}
 
 	public void setComment(String comment) {
+		if(comment.length() == 0) {
+			throw new IllegalArgumentException("Comment should have at least a single character");
+		}
 		this.comment = comment;
 	}
 

@@ -11,6 +11,7 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityExistsException;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -111,10 +112,10 @@ public class AppUser {
 		this.bookReviews.add(new Review(this, book, rate, comment));
 	}
     
-    public void editReview(int bookId, int rate, String comment) {
+    public void editReview(Long bookId, int rate, String comment) {
 		Review foundReview = this.bookReviews.stream().filter(b -> b.getBook().getId() == (bookId)).
-				findFirst().orElseThrow(() -> new IllegalArgumentException("Review not found"));
-		foundReview.update(rate, comment);
+				findFirst().orElseThrow(() -> new EntityNotFoundException("Review not found"));
+		foundReview.updateReview(rate, comment);
 	}
     
     public void removeReview(Book book) {

@@ -4,9 +4,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import com.gamifiedlibrary.api.service.ReviewService;
-
-import software.amazon.awssdk.http.HttpStatusCode;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.gamifiedlibrary.api.domain.model.AppUser;
 import com.gamifiedlibrary.api.domain.model.FavoriteBook;
 import com.gamifiedlibrary.api.domain.model.ReadingListBook;
-import com.gamifiedlibrary.api.infrastructure.dto.ReviewCreationDTO;
+import com.gamifiedlibrary.api.infrastructure.dto.ReviewPostingDTO;
 import com.gamifiedlibrary.api.infrastructure.dto.appuser.AccountCreationDTO;
 import com.gamifiedlibrary.api.infrastructure.dto.book.FavoriteBookDTO;
 import com.gamifiedlibrary.api.infrastructure.dto.book.ReadingListBookDTO;
@@ -35,6 +32,9 @@ import com.gamifiedlibrary.api.infrastructure.utils.JWTService;
 import com.gamifiedlibrary.api.service.AppUserService;
 import com.gamifiedlibrary.api.service.FavoriteBookService;
 import com.gamifiedlibrary.api.service.ReadingListService;
+import com.gamifiedlibrary.api.service.ReviewService;
+
+import software.amazon.awssdk.http.HttpStatusCode;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
@@ -240,7 +240,7 @@ public class UserController {
 	}
 	
 	@PostMapping("/reviews/{bookId}")
-	public ResponseEntity<Map<String, String>> addUserReview(@RequestHeader(value = "Authorization", required = false) String authorizationHeader , @PathVariable Long bookId, @RequestBody ReviewCreationDTO review) {
+	public ResponseEntity<Map<String, String>> addUserReview(@RequestHeader(value = "Authorization", required = false) String authorizationHeader , @PathVariable Long bookId, @RequestBody ReviewPostingDTO review) {
 		String token;
 		
 		Long userId;
@@ -251,6 +251,23 @@ public class UserController {
 		reviewService.addReview(userId, bookId, review.rate(), review.comment());
 		
 		return ResponseEntity.status(HttpStatusCode.CREATED).body(CustomAPIMessage.setMessage("success", "Review was created"));
+		
+	}
+	
+	@PatchMapping("/reviews/{bookId}")
+	public ResponseEntity<Map<String, String>> updateUserReview(@RequestHeader(value = "Authorization", required = false) String authorizationHeader , @PathVariable Long bookId, @RequestBody ReviewPostingDTO review) {
+		String token;
+		
+		Long userId;
+		
+		System.out.println(review.rate());
+		
+		token = jwtService.extractBearerToken(authorizationHeader);	
+		userId = jwtService.extractAllClaims(token).get("id", Long.class);
+		
+		reviewService.updateReview(userId, bookId, review.rate(), review.comment());
+		
+		return ResponseEntity.ok().body(CustomAPIMessage.setMessage("success", "Review was created"));
 		
 	}
 
