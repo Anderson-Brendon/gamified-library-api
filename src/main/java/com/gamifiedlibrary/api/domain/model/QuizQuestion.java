@@ -1,5 +1,7 @@
 package com.gamifiedlibrary.api.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -19,8 +21,9 @@ public class QuizQuestion {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	private int id;
+	private Long id;
 	
+	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "book_id")
 	private Book book;
@@ -45,13 +48,13 @@ public class QuizQuestion {
 	private String optionD;
 	
 	@NotBlank
-	private char correctAnswer;
+	private char correctOption;
 
-	public int getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -95,12 +98,12 @@ public class QuizQuestion {
 		this.optionD = optionD;
 	}
 
-	public char isCorrect_answer() {
-		return correctAnswer;
+	public char getCorrectOption() {
+		return correctOption;
 	}
 
-	public void setCorrect_answer(char correct_answer) {
-		this.correctAnswer = correct_answer;
+	public void setCorrectOption(char correctOption) {
+		this.correctOption = correctOption;
 	}
 	
 	

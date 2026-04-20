@@ -19,11 +19,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.gamifiedlibrary.api.domain.model.Book;
+import com.gamifiedlibrary.api.domain.model.QuizQuestion;
 import com.gamifiedlibrary.api.infrastructure.dto.ReviewPostingDTO;
 import com.gamifiedlibrary.api.infrastructure.dto.book.BookDetailDTO;
 import com.gamifiedlibrary.api.infrastructure.utils.CustomAPIMessage;
 import com.gamifiedlibrary.api.infrastructure.utils.JWTService;
 import com.gamifiedlibrary.api.service.BookService;
+import com.gamifiedlibrary.api.service.QuizQuestionService;
 import com.gamifiedlibrary.api.service.ReviewService;
 
 @RestController
@@ -37,10 +39,13 @@ public class BookController {
 	
 	private ReviewService reviewService;
 	
-	public BookController(BookService bookService, JWTService jwtService, ReviewService reviewService) {
+	private QuizQuestionService questionService;
+	
+	public BookController(BookService bookService, JWTService jwtService, ReviewService reviewService, QuizQuestionService questionService) {
 		this.bookService = bookService;
 		this.jwtService = jwtService;
 		this.reviewService = reviewService;
+		this.questionService = questionService;
 	}
 
 	/*@GetMapping
@@ -92,6 +97,12 @@ public class BookController {
         return ResponseEntity.status(HttpStatus.CREATED).body(CustomAPIMessage.setMessage("success", "Review from user with id " + userId + " was added for book with id " + bookId));
         
     }
+	
+	@GetMapping("/{id}/quiz-questions")
+	public ResponseEntity<List<QuizQuestion>> findQuizQuestionsFromBook(@PathVariable Long id){
+			List<QuizQuestion> questions = questionService.findAllQuestionsFromBook(id);
+			return ResponseEntity.ok().body(questions);
+	}
 
 	
 }

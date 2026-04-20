@@ -1,17 +1,21 @@
 package com.gamifiedlibrary.api.repository;
 
+import java.util.List;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
 import com.gamifiedlibrary.api.domain.model.QuizQuestion;
 
-public interface QuizQuestionRepository {
+@Repository
+public interface QuizQuestionRepository extends JpaRepository<QuizQuestion, Long>{
 	
-	public QuizQuestion findAll();
+	public List<QuizQuestion> findAllByBookId(Long id);
 	
-	public QuizQuestion findById(int id);
+	/*public QuizQuestion create(QuizQuestion quizQuestion);
 	
-	public QuizQuestion create(QuizQuestionDTO quizQuestionDTO);
+	public QuizQuestion update(int id, QuizQuestion quizQuestion);
 	
-	public QuizQuestion update(int id, QuizQuestionDTO quizQuestionDTO);
-	
-	public QuizQuestion deleteById(int id);
+	public QuizQuestion deleteById(int id);*/
 	
 }
