@@ -24,6 +24,7 @@ import com.gamifiedlibrary.api.domain.model.FavoriteBook;
 import com.gamifiedlibrary.api.domain.model.ReadingListBook;
 import com.gamifiedlibrary.api.infrastructure.dto.ReviewPostingDTO;
 import com.gamifiedlibrary.api.infrastructure.dto.appuser.AccountCreationDTO;
+import com.gamifiedlibrary.api.infrastructure.dto.appuser.UserInfoDTO;
 import com.gamifiedlibrary.api.infrastructure.dto.book.FavoriteBookDTO;
 import com.gamifiedlibrary.api.infrastructure.dto.book.ReadingListBookDTO;
 import com.gamifiedlibrary.api.infrastructure.dto.book.ReadingListUpdateDTO;
@@ -67,10 +68,16 @@ public class UserController {
 	}
 
 	@GetMapping("/{userId}")
-	public ResponseEntity<AppUser> getUserById(@PathVariable Long userId) {
-		AppUser user = appUserServices.findById(userId);
+	public ResponseEntity<UserInfoDTO> getUserById(@PathVariable Long userId) {
+		UserInfoDTO user = appUserServices.getUserInfo(userId);
 		return ResponseEntity.ok().body(user);
 	}
+	
+	/*@GetMapping("/{userId}/stats")
+	public ResponseEntity<UserInfoDTO> getUserByStats(@PathVariable Long userId) {
+		UserInfoDTO user = appUserServices.getUserDetails(userId);
+		return ResponseEntity.ok().body(user);
+	}*/
 
 	@PostMapping
 	public ResponseEntity<Map<String, String>> createUser(@RequestBody AccountCreationDTO accountCreationDTO) {
