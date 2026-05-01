@@ -23,8 +23,17 @@ public class QuizResultController {
 	
 	@GetMapping("/{userId}")
 	public ResponseEntity<List<QuizResult>> getQuizResultsByUserId(@PathVariable Long userId){
-		List<QuizResult> results = quizResultService.findAllResultsByUserById(userId);
+		List<QuizResult> results = quizResultService.findAllResultsByUserId(userId);
 		return ResponseEntity.ok(results);
+	}
+	
+	@GetMapping("/{userId}/book/{bookId}")
+	public ResponseEntity<QuizResult> getQuizResultByUserIdAndBookId(@PathVariable Long userId, @PathVariable Long bookId){
+		QuizResult result = quizResultService.findResultsByUserAndBookId(userId, bookId);
+		if(result == null) {
+			return ResponseEntity.notFound().build();
+		}
+		return ResponseEntity.ok(result);
 	}
 	
 }

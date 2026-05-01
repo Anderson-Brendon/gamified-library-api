@@ -40,7 +40,7 @@ public class AppUserService {
 		int totalQuizPoints = 0;
 		int totalCorrectAnswers = 0;
 		AppUser user = userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("User not found"));
-		List<QuizResult> results = quizResultService.findAllResultsByUserById(id);
+		List<QuizResult> results = quizResultService.findAllResultsByUserId(id);
 		for (QuizResult result : results) {
 			totalQuizPoints = totalQuizPoints + result.getPoints();
 			totalRandomAnswersChoosed = totalRandomAnswersChoosed + result.getRandonAnswersChoosed();

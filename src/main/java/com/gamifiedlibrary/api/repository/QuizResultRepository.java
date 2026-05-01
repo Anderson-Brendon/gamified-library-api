@@ -23,6 +23,8 @@ public interface QuizResultRepository extends JpaRepository<QuizResult, QuizResu
 	public List<UserLeaderboardDTO> findUsersWithHighestTotalScore(int size);
 	
 	public List<QuizResult> findByUserId(Long userId);
+	
+	public QuizResult findByUserIdAndBookId(Long userId, Long BookId);
 }
 
 /*

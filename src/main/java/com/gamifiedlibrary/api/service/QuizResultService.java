@@ -16,9 +16,14 @@ public class QuizResultService {
 		this.quizResultRepository = quizResultRepository;
 	}
 	
-	public List<QuizResult> findAllResultsByUserById(Long userId){
+	public List<QuizResult> findAllResultsByUserId(Long userId){
 		List<QuizResult> userResults = quizResultRepository.findByUserId(userId);
 		return userResults;
+	}
+	
+	public QuizResult findResultsByUserAndBookId(Long userId, Long bookId){
+		QuizResult userResult = quizResultRepository.findByUserIdAndBookId(userId, bookId);
+		return userResult;
 	}
 	
 }
