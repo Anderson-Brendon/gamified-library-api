@@ -95,6 +95,14 @@ public class AppUser {
     	}
 		this.booksOnList.add(new ReadingListBook(this, book, 0, false));
 	}
+    
+    public void addQuizResult(QuizResult quizResult) {
+    	boolean exists = this.quizResults.stream().anyMatch(q -> q.getId() == quizResult.getId());
+    	if(exists) {
+    		throw new EntityExistsException("This quiz is already answered");
+    	}
+		this.quizResults.add(quizResult);
+	}
 	
     public void removeBookFromList(Book book) {
 		this.booksOnList.removeIf(bookOnList -> bookOnList.getBook().equals(book));

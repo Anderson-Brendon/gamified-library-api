@@ -28,10 +28,13 @@ import com.gamifiedlibrary.api.infrastructure.dto.appuser.UserInfoDTO;
 import com.gamifiedlibrary.api.infrastructure.dto.book.FavoriteBookDTO;
 import com.gamifiedlibrary.api.infrastructure.dto.book.ReadingListBookDTO;
 import com.gamifiedlibrary.api.infrastructure.dto.book.ReadingListUpdateDTO;
+import com.gamifiedlibrary.api.infrastructure.dto.quiz.QuizResultDTO;
+import com.gamifiedlibrary.api.infrastructure.dto.quiz.UserAnswerDTO;
 import com.gamifiedlibrary.api.infrastructure.utils.CustomAPIMessage;
 import com.gamifiedlibrary.api.infrastructure.utils.JWTService;
 import com.gamifiedlibrary.api.service.AppUserService;
 import com.gamifiedlibrary.api.service.FavoriteBookService;
+import com.gamifiedlibrary.api.service.QuizResultService;
 import com.gamifiedlibrary.api.service.ReadingListService;
 import com.gamifiedlibrary.api.service.ReviewService;
 
@@ -51,14 +54,19 @@ public class UserController {
 	FavoriteBookService favoriteBookService;
 	
 	JWTService jwtService;
+	
+	QuizResultService quizResultService;
 
-	public UserController(AppUserService appUserServices, ReadingListService readingListService,
-			FavoriteBookService favoriteBookService, JWTService jwtService, ReviewService reviewService) {
+	public UserController(AppUserService appUserServices, ReadingListService readingListService, 
+			FavoriteBookService favoriteBookService, JWTService jwtService, ReviewService reviewService,
+			QuizResultService quizResultService) 
+	{
 		this.appUserServices = appUserServices;
 		this.readingListService = readingListService;
 		this.favoriteBookService = favoriteBookService;
 		this.jwtService = jwtService;
 		this.reviewService = reviewService;
+		this.quizResultService = quizResultService;
 	}
 
 	@GetMapping
@@ -275,6 +283,23 @@ public class UserController {
 		reviewService.updateReview(userId, bookId, review.rate(), review.comment());
 		
 		return ResponseEntity.ok().body(CustomAPIMessage.setMessage("success", "Review was created"));
+		
+	}
+	
+	@PostMapping("quiz/{bookId}")
+	public ResponseEntity<QuizResultDTO> submitQuizResult(@RequestHeader(value = "Authorization", required = false) String authorizationHeader, @PathVariable Long bookId,@RequestBody  List<UserAnswerDTO> userAnswers){
+       
+		String token;
+		
+		Long userId;
+		
+		token = jwtService.extractBearerToken(authorizationHeader);	
+		
+		userId = jwtService.extractAllClaims(token).get("id", Long.class);
+		
+		QuizResultDTO result = quizResultService.submitQuizResult(userId, bookId, userAnswers);
+		
+		return ResponseEntity.ok(result);
 		
 	}
 

@@ -18,8 +18,17 @@ public class QuizResult {
 		
 	}
 	
+	public QuizResult(AppUser user, Book book, int correctAnswers, int points, int randomAnswersChoosed) {
+		this.user = user;
+		this.book = book;
+		this.correctAnswers = correctAnswers;
+		this.points = points;
+		this.randomAnswersChoosed = randomAnswersChoosed;
+		
+	}
+
 	@EmbeddedId
-	private QuizResultId id;
+	private QuizResultId id = new QuizResultId();;
 	
 	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)

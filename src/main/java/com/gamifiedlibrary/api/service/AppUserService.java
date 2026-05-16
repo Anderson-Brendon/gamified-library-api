@@ -10,6 +10,7 @@ import com.gamifiedlibrary.api.infrastructure.dto.appuser.AccountCreationDTO;
 import com.gamifiedlibrary.api.infrastructure.dto.appuser.UserInfoDTO;
 import com.gamifiedlibrary.api.infrastructure.utils.PasswordService;
 import com.gamifiedlibrary.api.repository.AppUserRepository;
+import com.gamifiedlibrary.api.repository.QuizResultRepository;
 
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
@@ -17,11 +18,11 @@ import jakarta.persistence.EntityNotFoundException;
 @Service
 public class AppUserService {
 	
-	QuizResultService quizResultService;
+	QuizResultRepository quizResultRepository;
 	
-	public AppUserService(AppUserRepository userRepository, QuizResultService quizResultService) {
+	public AppUserService(AppUserRepository userRepository, QuizResultRepository quizResultRepository) {
 		this.userRepository = userRepository;
-		this.quizResultService = quizResultService;
+		this.quizResultRepository = quizResultRepository;
 	}
 	
 	private AppUserRepository userRepository;
@@ -40,7 +41,7 @@ public class AppUserService {
 		int totalQuizPoints = 0;
 		int totalCorrectAnswers = 0;
 		AppUser user = userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("User not found"));
-		List<QuizResult> results = quizResultService.findAllResultsByUserId(id);
+		List<QuizResult> results = quizResultRepository.findByUserId(id);
 		for (QuizResult result : results) {
 			totalQuizPoints = totalQuizPoints + result.getPoints();
 			totalRandomAnswersChoosed = totalRandomAnswersChoosed + result.getRandonAnswersChoosed();

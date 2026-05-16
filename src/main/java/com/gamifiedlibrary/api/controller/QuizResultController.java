@@ -3,6 +3,7 @@ package com.gamifiedlibrary.api.controller;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,6 +14,7 @@ import com.gamifiedlibrary.api.service.QuizResultService;
 
 @RestController
 @RequestMapping("/quiz-results")
+@CrossOrigin(origins = "http://localhost:3000")
 public class QuizResultController {
 
 	public QuizResultService quizResultService;
