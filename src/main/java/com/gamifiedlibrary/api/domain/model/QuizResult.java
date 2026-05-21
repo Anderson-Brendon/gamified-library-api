@@ -18,12 +18,12 @@ public class QuizResult {
 		
 	}
 	
-	public QuizResult(AppUser user, Book book, int correctAnswers, int points, int randomAnswersChoosed) {
+	public QuizResult(AppUser user, Book book, int correctAnswers, int points, int randomAnswers) {
 		this.user = user;
 		this.book = book;
 		this.correctAnswers = correctAnswers;
 		this.points = points;
-		this.randomAnswersChoosed = randomAnswersChoosed;
+		this.randomAnswers = randomAnswers;
 		
 	}
 
@@ -52,7 +52,7 @@ public class QuizResult {
 	
 	@Max(value = 10, message = "Value must be less than or equal to 10")
 	@NotNull
-	private int randomAnswersChoosed;
+	private int randomAnswers;
 
 	public QuizResultId getId() {
 		return id;
@@ -74,12 +74,12 @@ public class QuizResult {
 		this.points = points;
 	}
 
-	public int getRandonAnswersChoosed() {
-		return randomAnswersChoosed;
+	public int getRandomAnswers() {
+		return randomAnswers;
 	}
 
-	public void setRandonAnswersChoosed(int randonAnswersChoosed) {
-		this.randomAnswersChoosed = randonAnswersChoosed;
+	public void setRandomAnswers(int randonAnswersChoosed) {
+		this.randomAnswers = randonAnswersChoosed;
 	}
 	
 	
