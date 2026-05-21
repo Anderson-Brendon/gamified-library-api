@@ -1,7 +1,12 @@
 package com.gamifiedlibrary.api.domain.model;
 
+import java.time.OffsetDateTime;
+
+import org.hibernate.annotations.CreationTimestamp;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -24,7 +29,6 @@ public class QuizResult {
 		this.correctAnswers = correctAnswers;
 		this.points = points;
 		this.randomAnswers = randomAnswers;
-		
 	}
 
 	@EmbeddedId
@@ -54,6 +58,10 @@ public class QuizResult {
 	@NotNull
 	private int randomAnswers;
 
+	@CreationTimestamp
+	@Column(name = "completed_at", insertable = false, updatable = false)
+	private OffsetDateTime completedAt;
+
 	public QuizResultId getId() {
 		return id;
 	}
@@ -81,6 +89,9 @@ public class QuizResult {
 	public void setRandomAnswers(int randonAnswersChoosed) {
 		this.randomAnswers = randonAnswersChoosed;
 	}
-	
-	
+
+	public OffsetDateTime getCompletedAt() {
+		return completedAt;
+	}
+
 }

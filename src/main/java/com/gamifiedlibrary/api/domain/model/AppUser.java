@@ -61,6 +61,10 @@ public class AppUser {
 	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL)
 	List<QuizResult> quizResults = new ArrayList<QuizResult>();
 	
+	public List<QuizResult> getQuizResults() {
+		return quizResults;
+	}
+
 	@JsonIgnore                            //indica que só vai buscar os dados ao acessar o campo
 	@OneToMany(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Set<FavoriteBook> favoritesBooks = new HashSet<>();	
@@ -97,7 +101,7 @@ public class AppUser {
 	}
     
     public void addQuizResult(QuizResult quizResult) {
-    	boolean exists = this.quizResults.stream().anyMatch(q -> q.getId() == quizResult.getId());
+    	boolean exists = this.quizResults.stream().anyMatch(q -> q.getId().equals(quizResult.getId()));
     	if(exists) {
     		throw new EntityExistsException("This quiz is already answered");
     	}

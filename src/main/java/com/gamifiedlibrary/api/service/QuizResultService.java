@@ -49,7 +49,7 @@ public class QuizResultService {
 		
 		for(UserAnswerDTO answer : userAnswers) {
 			
-			if(answer.choosedOption().equals(answer.correctOption())) {
+			if(answer.selectedOption().equals(answer.correctOption())) {
 				if(answer.randomSelection()){
 					randomAnswers += 1;
 					correctRandomAnswers += 1;
@@ -62,7 +62,7 @@ public class QuizResultService {
 		
 		totalPoints = correctRandomAnswers * 5 + correctManualAnswers * 10;
 		
-		HashMap<String, Integer> result = new HashMap<String, Integer>();
+		HashMap<String, Integer> result = new HashMap<>();
 		
 		result.put("correctAnswers", correctRandomAnswers + correctManualAnswers);
 		result.put("totalPoints", totalPoints);
@@ -86,7 +86,9 @@ public class QuizResultService {
 		
 		userService.updateUser(user);
 		
-		return new QuizResultDTO(resultInfo.get("randomAnswers"), resultInfo.get("correctAnswers"),resultInfo.get("totalPoints"));
+		quizResult = user.getQuizResults().getLast();
+		
+		return new QuizResultDTO(resultInfo.get("randomAnswers"), resultInfo.get("correctAnswers"),resultInfo.get("totalPoints"), quizResult.getCompletedAt());
 		
 	}
 
